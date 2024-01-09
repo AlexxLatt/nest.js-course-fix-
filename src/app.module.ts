@@ -12,7 +12,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import ormconfig from '@app/ormconfig';
 
 @Module({
-  imports: [TypeOrmModule.forRoot(ormconfig), TagModule],
+  imports: [TypeOrmModule.forRoot(ormconfig), TagModule], // TypeOrmModule.forRoot(ormconfig) строка импортирует подключение к бд
   controllers: [AppController],
   providers: [AppService],
 })

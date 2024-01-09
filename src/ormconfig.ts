@@ -1,3 +1,4 @@
+//файл подключается к нашей бд а после  в строке  entities: [__dirname + '/**/*.entity{.ts,.js}'] выполняет код в tag.entity.ts
 import { ConnectionOptions } from 'typeorm';
 const config: ConnectionOptions = {
   type: 'postgres',
@@ -9,4 +10,4 @@ const config: ConnectionOptions = {
   entities: [__dirname + '/**/*.entity{.ts,.js}'],
   synchronize: true,
 };
-export default config;
+export default config; //  export в AppModule
