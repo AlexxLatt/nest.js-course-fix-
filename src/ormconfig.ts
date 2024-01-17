@@ -8,6 +8,10 @@ const config: ConnectionOptions = {
   password: '123',
   database: 'mediumclone',
   entities: [__dirname + '/**/*.entity{.ts,.js}'],
-  synchronize: true,
+  synchronize: false, // true дает возможность при запуске создавать таблицы данных если их нет в бд
+  migrations: [__dirname + '/migrations/**/*{.ts,.js}'], // ооткуда будет запуск миграций
+  cli: {
+    migrationsDir: 'src/migrations',
+  }, // куда миграции будут создаваться
 };
 export default config; //  export в AppModule

@@ -1,0 +1,43 @@
+import { Injectable } from '@nestjs/common';
+import { CreateUserDto } from './dto/createUser.dto';
+import { UserEntity } from './user.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { sign } from 'jsonwebtoken';
+import { JWT_SECRET } from '@app/config';
+import { UserResponsInterface } from './types/userRespons.interface';
+
+@Injectable()
+export class UserService {
+  constructor(
+    @InjectRepository(UserEntity)
+    private readonly userRepository: Repository<UserEntity>,
+  ) {}
+  async createUser(createUserDto: CreateUserDto): Promise<UserEntity> {
+    const newUser = new UserEntity();
+    Object.assign(newUser, createUserDto); // копируем свойства объекта createUserDto в newUser
+    console.log('new user', newUser);
+    return await this.userRepository.save(newUser);
+  }
+
+  generateJwt(user: UserEntity): string {
+    // создаем токен
+    return sign(
+      {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+      },
+      JWT_SECRET,
+    );
+  }
+
+  buildUserResponse(user: UserEntity): UserResponsInterface {
+    return {
+      user: {
+        ...user,
+        token: this.generateJwt(user),
+      },
+    };
+  }
+}

@@ -10,9 +10,11 @@ import { TagModule } from '@app/tag/tag.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import ormconfig from '@app/ormconfig';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { UserModule } from './user/user.module';
 
 @Module({
-  imports: [TypeOrmModule.forRoot(ormconfig), TagModule], // TypeOrmModule.forRoot(ormconfig) строка импортирует подключение к бд
+  imports: [TypeOrmModule.forRoot(ormconfig), TagModule, UserModule], // TypeOrmModule.forRoot(ormconfig) строка импортирует подключение к бд
   controllers: [AppController],
   providers: [AppService],
 })
