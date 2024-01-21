@@ -18,7 +18,7 @@ export class UserEntity {
   @Column({ default: '' })
   image: string;
 
-  @Column()
+  @Column({ select: false }) //возращает объект users без поля password
   password: string;
 
   @BeforeInsert() // вызов функции до того как будет сделана запись в базу

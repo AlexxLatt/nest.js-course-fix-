@@ -1,5 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { AppController } from '@app/app.controller';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -12,6 +12,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import ormconfig from '@app/ormconfig';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { UserModule } from './user/user.module';
+import { AuthMiddleware } from './user/middlewares/auth.middleware';
+import { UserService } from './user/user.service';
 
 @Module({
   imports: [TypeOrmModule.forRoot(ormconfig), TagModule, UserModule], // TypeOrmModule.forRoot(ormconfig) строка импортирует подключение к бд
@@ -19,4 +21,11 @@ import { UserModule } from './user/user.module';
   providers: [AppService],
 })
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(AuthMiddleware).forRoutes({
+      path: '*',
+      method: RequestMethod.ALL,
+    });
+  }
+}
