@@ -3,7 +3,9 @@ import {
   Controller,
   Get,
   Post,
+  Put,
   Req,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -13,6 +15,10 @@ import { UserResponsInterface } from './types/userRespons.interface';
 import { login } from './dto/login.dto';
 import { Request } from 'express';
 import { ExpressRequestIntetface } from '@app/types/expressRequest';
+import { User } from '@app/decorators/user.decorator';
+import { UserEntity } from './user.entity';
+import { AuthGuard } from '@app/guards/auth.guard';
+import { UpdateUserDto } from './dto/updateUser.dto';
 
 @Controller()
 export class UserController {
@@ -33,11 +39,36 @@ export class UserController {
     const user = await this.userService.login(loginUserDto);
     return this.userService.buildUserResponse(user);
   }
+  //пример с созданным под себя декоратором
   @Get('user')
+  @UseGuards(AuthGuard)
   async currentUser(
-    @Req() request: ExpressRequestIntetface,
+    @User() user: UserEntity,
+    // @User('id') currentUserId: number,
   ): Promise<UserResponsInterface> {
-    console.log(request.user);
-    return this.userService.buildUserResponse(request.user);
+    // console.log('currentUserId', currentUserId);
+    console.log('user', user);
+    return this.userService.buildUserResponse(user);
+  }
+  //пример с middleware авторизацией
+  // @Get('user')
+  // async currentUser(
+  //   @Req() request: ExpressRequestIntetface,
+  //   @User('id') user: UserEntity,
+  // ): Promise<UserResponsInterface> {
+  //   console.log('user', user);
+  //   return this.userService.buildUserResponse(request.user);
+  // }
+  @Put('user')
+  @UseGuards(AuthGuard)
+  async updateCurrentUser(
+    @User('id') currentUserId: number,
+    @Body('user') updateUserDto: UpdateUserDto,
+  ): Promise<UserResponsInterface> {
+    const updateUser = await this.userService.updateUser(
+      updateUserDto,
+      currentUserId,
+    );
+    return this.userService.buildUserResponse(updateUser);
   }
 }
