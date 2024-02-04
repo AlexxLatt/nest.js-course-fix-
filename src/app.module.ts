@@ -14,9 +14,15 @@ import ormconfig from '@app/ormconfig';
 import { UserModule } from './user/user.module';
 import { AuthMiddleware } from './user/middlewares/auth.middleware';
 import { UserService } from './user/user.service';
+import { ArticaleModule } from './article/article.module';
 
 @Module({
-  imports: [TypeOrmModule.forRoot(ormconfig), TagModule, UserModule], // TypeOrmModule.forRoot(ormconfig) строка импортирует подключение к бд
+  imports: [
+    TypeOrmModule.forRoot(ormconfig),
+    TagModule,
+    UserModule,
+    ArticaleModule,
+  ], // TypeOrmModule.forRoot(ormconfig) строка импортирует подключение к бд
   controllers: [AppController],
   providers: [AppService],
 })
